@@ -6,9 +6,6 @@ let { tab = $bindable('nuevo') } = $props();
 <div class="bg-red-300">
   <div>
     <button onclick={() => tab = 'nuevo'}>Nuevo</button>
-    <button onclick={() => {
-      console.log('Cambiando a aviso');
-      tab = 'aviso';
-    }}>Aviso</button>
+    <button onclick={() => tab = 'aviso'}>Aviso</button>
   </div>
 </div>
