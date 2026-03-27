@@ -19,6 +19,17 @@
     { id: 5, name: 'Otros' },
   ]
 
+  function handleImageChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      noticeFormState.image = target.files[0];
+      if(noticeContent.imageUrl){
+        URL.revokeObjectURL(noticeContent.imageUrl);
+      }
+      noticeContent.imageUrl = URL.createObjectURL(target.files[0]);
+    }
+  }
+
 </script>
 
 <div class="m-2 flex flex-col items-center rounded-xl min-w-130 p-4 bg-slate-200">
@@ -44,10 +55,14 @@
       <label for="noticecontent">Contenido</label>
       <textarea bind:value={noticeContent.raw} class="min-h-50 max-h-100 border rounded-md p-4" id="noticecontent"></textarea>
     </div>
-    {#if noticeFormState.category === 'Noticias'}
+    {#if 
+      noticeFormState.noticeType === 'Doble con imagen' || 
+      noticeFormState.noticeType === 'Solo imagen' || 
+      noticeFormState.noticeType === 'Grande'
+    }
       <div class="flex flex-col gap-2 my-4">
         <label for="imagecontent">Imagen</label>
-        <input class="bg-slate-300 p-2 rounded text-sm" type="file">
+        <input class="bg-slate-300 p-2 rounded text-sm" type="file" onchange={handleImageChange}>
       </div>
     {/if}
     <span class="flex-1"></span>

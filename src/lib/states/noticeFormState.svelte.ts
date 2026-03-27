@@ -20,4 +20,6 @@ export const noticeFormState = $state<NoticeFormState>({
 
 export const noticeContent = $state({
   raw: '',
+  imageUrl: '',
+  designType: 'A',
 });
