@@ -15,17 +15,19 @@
   ]
 
 </script>
-<div class="flex-1 flex flex-col m-2 p-4 rounded-xl bg-slate-200">
-  <div class="flex flex-row justify-center gap-2">
-    {#each designTypes as design}
-      <button 
-        onclick={() => noticeContent.designType = design.name}
-        class="px-2 py-1 rounded-md bg-slate-300 text-sm"
-      >
-        {design.name}
-      </button>
-    {/each}
-  </div>
+<div class="flex-3 flex flex-col m-2 p-4 rounded-xl bg-slate-200">
+  {#if noticeFormState.noticeType == 'Doble con imagen' || noticeFormState.noticeType == 'Grande'}
+    <div class="flex flex-row justify-center gap-2">
+      {#each designTypes as design}
+        <button 
+          onclick={() => noticeContent.designType = design.name}
+          class="px-2 py-1 rounded-md bg-slate-300 text-sm"
+        >
+          {design.name}
+        </button>
+      {/each}
+    </div>
+  {/if}
   <div class="flex-1 flex items-center justify-center" style="white-space: pre-line;">
     {#if noticeContent.raw == ''}
       Sin vista previa

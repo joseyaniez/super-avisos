@@ -38,7 +38,7 @@
 
 </script>
 
-<div class="m-2 flex flex-col items-center rounded-xl min-w-130 p-4 bg-slate-200">
+<div class="m-2 flex flex-2 flex-col items-center rounded-xl min-w-130 p-4 bg-slate-200 overflow-scroll">
   <h2 class="font-bold text-xl">Crear un nuevo aviso</h2>
   <form action="" class="w-full flex flex-col h-full">
     <div class="flex flex-row gap-3 my-4">
