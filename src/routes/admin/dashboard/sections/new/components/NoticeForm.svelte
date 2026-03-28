@@ -19,6 +19,12 @@
     { id: 5, name: 'Otros' },
   ]
 
+  const documentTypes = [
+    { id: 1, name: '-' },
+    { id: 2, name: 'Factura' },
+    { id: 3, name: 'Boleta' },
+  ]
+
   function handleImageChange(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
@@ -36,7 +42,7 @@
   <h2 class="font-bold text-xl">Crear un nuevo aviso</h2>
   <form action="" class="w-full flex flex-col h-full">
     <div class="flex flex-row gap-3 my-4">
-      <label class="flex-1" for="noticetype">Tipo</label>
+      <label class="flex-2" for="noticetype">Tipo</label>
       <select bind:value={noticeFormState.noticeType} id="noticetype" class="flex-2 p-1 rounded text-sm border">
         {#each noticeTypes as noticeType}
           <option value={noticeType.name}>{noticeType.name}</option>
@@ -44,12 +50,16 @@
       </select>
     </div>
     <div class="flex flex-row gap-3 my-4">
-      <label class="flex-1" for="noticetype">Categoría</label>
+      <label class="flex-2" for="noticetype">Categoría</label>
       <select bind:value={noticeFormState.category}  id="noticetype" class="flex-2 p-1 rounded text-sm border">
         {#each categories as category}
           <option value={category.name}>{category.name}</option>
         {/each}
       </select>
+    </div>
+    <div class="flex flex-row gap-3 my-4">
+      <label class="flex-2" for="clientNumber">Fecha expiración</label>
+      <input type="date" bind:value={noticeFormState.expirationDate} id="clientNumber" class="flex-2 p-1 text-sm rounded border"/>
     </div>
     <div class="flex flex-col gap-2 my-4">
       <label for="noticecontent">Contenido</label>
@@ -65,9 +75,27 @@
         <input class="bg-slate-300 p-2 rounded text-sm" type="file" onchange={handleImageChange}>
       </div>
     {/if}
+    <div class="flex flex-row gap-3 my-4">
+      <label class="flex-3" for="clientNumber">Número cliente</label>
+      <input type="text" bind:value={noticeFormState.clientNumber} id="clientNumber" class="flex-2 p-1 text-sm rounded border"/>
+    </div>
+    <div class="flex flex-row gap-3 my-4">
+      <label for="documentType" class="flex-3">Comprobante</label>
+      <select bind:value={noticeFormState.paymentType}  id="noticetype" class="flex-2 p-1 rounded text-sm border">
+        {#each documentTypes as doc}
+          <option value={doc.name}>{doc.name}</option>
+        {/each}
+      </select>
+    </div>
+    {#if noticeFormState.paymentType !== '-'}
+      <div class="flex flex-row gap-3 my-4">
+        <label class="flex-3" for="clientNumber">Número documento</label>
+        <input type="text" bind:value={noticeFormState.documentNumber} id="clientNumber" class="flex-2 p-1 text-sm rounded border"/>
+      </div>
+    {/if}
     <span class="flex-1"></span>
-    <div class="flex flex-row gap-4 justify-end">
-      <input type="submit" class="py-1 px-2 rounded bg-slate-300 cursor-pointer" value="Guardar aviso"/>
+    <div class="">
+      <input type="submit" class="py-2 w-full rounded-md bg-slate-500 hover:bg-slate-600 font-bold text-white cursor-pointer" value="Guardar aviso"/>
     </div>
   </form>
 </div>

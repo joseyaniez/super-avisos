@@ -5,7 +5,9 @@ type NoticeFormState = {
   documentNumber: string,
   image: File | null,
   clientName: string,
+  clientNumber: string,
   paymentType: string,
+  expirationDate: Date | null,
 }
 
 export const noticeFormState = $state<NoticeFormState>({
@@ -15,7 +17,9 @@ export const noticeFormState = $state<NoticeFormState>({
   documentNumber: '',
   image: null,
   clientName: '',
+  clientNumber: '',
   paymentType: '',
+  expirationDate: null,
 })
 
 export const noticeContent = $state({
