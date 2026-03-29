@@ -10,8 +10,14 @@ type NoticeFormState = {
   expirationDate: Date | null,
 }
 
+type NoticeContent = {
+  raw: string,
+  imageUrl: string,
+  designType: string,
+}
+
 export const noticeFormState = $state<NoticeFormState>({
-  noticeType: '',
+  noticeType: 'Mediano',
   category: '',
   observation: '',
   documentNumber: '',
@@ -25,5 +31,10 @@ export const noticeFormState = $state<NoticeFormState>({
 export const noticeContent = $state({
   raw: '',
   imageUrl: '',
-  designType: 'A',
+  designType: 'I',
 });
+
+
+export const noticeValidate = (noticeForm: NoticeFormState, noticeContent: NoticeContent) => {
+
+}

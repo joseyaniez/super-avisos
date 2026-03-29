@@ -25,6 +25,13 @@
     { id: 3, name: 'Boleta' },
   ]
 
+  $effect(() => {
+    const match = noticeContent.raw.match(/\b\d{9}\b/);
+    if(noticeFormState.clientNumber == '' && match){
+      noticeFormState.clientNumber = match[0];
+    }
+  })
+
   function handleImageChange(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
@@ -34,6 +41,11 @@
       }
       noticeContent.imageUrl = URL.createObjectURL(target.files[0]);
     }
+  }
+
+  function handleSubmit(){
+    console.log($state.snapshot(noticeFormState));
+    console.log($state.snapshot(noticeContent));
   }
 
 </script>
@@ -52,6 +64,7 @@
     <div class="flex flex-row gap-3 my-4">
       <label class="flex-2" for="noticetype">Categoría</label>
       <select bind:value={noticeFormState.category}  id="noticetype" class="flex-2 p-1 rounded text-sm border">
+          <option value="" disabled selected> - </option>
         {#each categories as category}
           <option value={category.name}>{category.name}</option>
         {/each}
@@ -87,7 +100,7 @@
         {/each}
       </select>
     </div>
-    {#if noticeFormState.paymentType !== '-'}
+    {#if noticeFormState.paymentType == 'Boleta' || noticeFormState.paymentType == 'Factura'}
       <div class="flex flex-row gap-3 my-4">
         <label class="flex-3" for="clientNumber">Número documento</label>
         <input type="text" bind:value={noticeFormState.documentNumber} id="clientNumber" class="flex-2 p-1 text-sm rounded border"/>
@@ -95,7 +108,7 @@
     {/if}
     <span class="flex-1"></span>
     <div class="">
-      <input type="submit" class="py-2 w-full rounded-md bg-slate-500 hover:bg-slate-600 font-bold text-white cursor-pointer" value="Guardar aviso"/>
+      <input type="submit" onclick={handleSubmit} class="py-2 w-full rounded-md bg-slate-500 hover:bg-slate-600 font-bold text-white cursor-pointer" value="Guardar aviso"/>
     </div>
   </form>
 </div>
