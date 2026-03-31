@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { noticeContent, noticeFormState } from "$lib/states/noticeFormState.svelte";
+  import { errorMessages, noticeContent, noticeFormState } from "$lib/states/noticeFormState.svelte";
   import { parseEditorText, type ParsedText } from "$lib/util/parser/parseContents";
     import BigNoticeView from "./notice-types/BigNoticeView.svelte";
   import DobbleImageNoticeView from "./notice-types/DobbleImageNoticeView.svelte";
@@ -86,6 +86,16 @@
         <p>!</p>
         <p>{minContentTextErrorMessage}</p>
       </div>
+    </div>
+  {/if}
+  {#if errorMessages.length > 0}
+    <div class="flex flex-col gap-2 mt-4">
+      {#each errorMessages as errorMessage}
+        <div class="flex flex-row gap-4 rounded-md bg-red-400 text-white font-bold py-2 px-4 w-1/3">
+          <p>!!</p>
+          <p>{errorMessage}</p>
+        </div>
+      {/each}
     </div>
   {/if}
 </div>
