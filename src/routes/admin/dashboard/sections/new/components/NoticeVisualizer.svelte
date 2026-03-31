@@ -1,7 +1,8 @@
 <script lang="ts">
   import { errorMessages, noticeContent, noticeFormState } from "$lib/states/noticeFormState.svelte";
   import { parseEditorText, type ParsedText } from "$lib/util/parser/parseContents";
-    import BigNoticeView from "./notice-types/BigNoticeView.svelte";
+  import { fade } from "svelte/transition";
+  import BigNoticeView from "./notice-types/BigNoticeView.svelte";
   import DobbleImageNoticeView from "./notice-types/DobbleImageNoticeView.svelte";
   import DobbleNoticeView from "./notice-types/DobbleNoticeView.svelte";
   import MedianNoticeView from "./notice-types/MedianNoticeView.svelte";
@@ -34,7 +35,7 @@
   })
 
 </script>
-<div class="flex-3 flex flex-col m-2 p-4 rounded-xl bg-slate-200">
+<div class="flex-3 flex flex-col m-2 p-4 rounded-xl bg-slate-200 relative">
   {#if noticeFormState.noticeType == 'Doble con imagen' || noticeFormState.noticeType == 'Grande'}
     <div class="flex flex-row justify-center gap-2">
       {#each designTypes as design}
@@ -80,22 +81,25 @@
       />
     {/if}
   </div>
-  {#if minContentTextErrorMessage != ''}
-    <div class="flex flex-col">
-      <div class="flex flex-row gap-4 rounded-md bg-red-400 text-white font-bold py-2 px-4 w-1/3">
-        <p>!</p>
-        <p>{minContentTextErrorMessage}</p>
-      </div>
-    </div>
-  {/if}
-  {#if errorMessages.length > 0}
-    <div class="flex flex-col gap-2 mt-4">
-      {#each errorMessages as errorMessage}
-        <div class="flex flex-row gap-4 rounded-md bg-red-400 text-white font-bold py-2 px-4 w-1/3">
-          <p>!!</p>
-          <p>{errorMessage}</p>
+  <div class="absolute bottom-4 left-2">
+    {#if minContentTextErrorMessage != ''}
+      <div class="flex flex-col">
+        <div class="flex flex-row gap-4 rounded-md bg-rose-400 text-white font-bold py-2 px-4 w-2/3">
+          <p>!</p>
+          <p>{minContentTextErrorMessage}</p>
         </div>
-      {/each}
-    </div>
-  {/if}
+      </div>
+    {/if}
+    {#if errorMessages.length > 0}
+      <div class="flex flex-col gap-2 mt-4">
+        {#each errorMessages as errorMessage}
+          <div class="flex flex-row gap-4 min-w-2/3 rounded-md bg-red-400 text-white font-bold py-2 px-4 w-1/3" transition:fade|global>
+            <p>!!</p>
+            <p>{errorMessage}</p>
+          </div>
+        {/each}
+      </div>
+    {/if}
+
+  </div>
 </div>
