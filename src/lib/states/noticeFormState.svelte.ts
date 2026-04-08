@@ -1,3 +1,76 @@
+class NoticeFormStateA {
+  noticeType = $state("Mediano");
+  category = $state("");
+  observation = $state("");
+  documentNumber = $state("");
+  image = $state<File | null>(null);
+  clientName = $state("");
+  clientNumber = $state("");
+  paymentType = $state("");
+  expirationDate = $state("");
+
+  rawContent = $state("");
+  imageUrl = $state("");
+  designType = $state("I");
+
+  errorMessages = $state<string[]>([]);
+
+  reset(){
+    this.noticeType = "Mediano";
+    this.category = "";
+    this.observation = "";
+    this.documentNumber = "";
+    this.image = null;
+    this.clientName = "";
+    this.clientNumber = "";
+    this.paymentType = "";
+    this.expirationDate = "";
+    this.rawContent = "";
+    this.imageUrl = "";
+    this.designType = "I";
+    this.errorMessages = [];
+  }
+
+  formValidate(): boolean {
+    if(this.category.trim() === '') {
+      errorMessages.push('La categoría es requerida.');
+    }
+    // Validar la fecha correctamente
+    if(this.expirationDate.trim() === '') {
+      errorMessages.push('La fecha de vencimiento es requerida.');
+    } else {
+      const today = new Date();
+      const expirationDate = new Date(this.expirationDate);
+      if(isNaN(expirationDate.getTime())) {
+        this.errorMessages.push('La fecha de vencimiento no es válida.');
+      } else if(expirationDate < today) {
+        this.errorMessages.push('La fecha de vencimiento debe ser futura.');
+      }
+    }
+    if(noticeContent.raw.trim() === '') {
+      this.errorMessages.push('El contenido del aviso es requerido.');
+    }
+    if(this.clientNumber.trim() === '') {
+      this.errorMessages.push('El número de cliente es requerido.');
+    } else if(this.clientNumber.trim().length != 9) {
+      this.errorMessages.push('El número de cliente debe tener 9 dígitos.');
+    }
+
+    if(this.paymentType == 'Boleta' || this.paymentType == 'Factura') {
+      if(this.documentNumber.trim() === '') {
+        this.errorMessages.push('El número de documento es requerido para el tipo de pago seleccionado.');
+      } else if(this.documentNumber.trim().length != 8) {
+        this.errorMessages.push('El número de documento debe tener 8 dígitos.');
+      }
+    }
+
+    return this.errorMessages.length === 0;
+
+  }
+}
+
+export const noticeFormStateA = new NoticeFormStateA();
+
 type NoticeFormState = {
   noticeType: string,
   category: string,
