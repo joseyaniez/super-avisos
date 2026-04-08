@@ -1,5 +1,5 @@
 <script>
-  import { noticeFormState } from "$lib/states/noticeFormState.svelte";
+  import { noticeFormState } from "$lib/features/notices/states/noticeFormState.svelte";
 
   let { title, content, postdata, imageURL } = $props();
 </script>

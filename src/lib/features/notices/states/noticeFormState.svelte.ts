@@ -13,8 +13,6 @@ class NoticeFormState {
   imageUrl = $state("");
   designType = $state("I");
 
-  errorMessages = $state<string[]>([]);
-
   reset(){
     this.noticeType = "Mediano";
     this.category = "";
@@ -28,45 +26,45 @@ class NoticeFormState {
     this.rawContent = "";
     this.imageUrl = "";
     this.designType = "I";
-    this.errorMessages = [];
   }
 
-  formValidate(): boolean {
+  formValidate(): string[] {
+    let errorMessages: string[] = [];
     if(this.category.trim() === '') {
-      this.errorMessages.push('La categoría es requerida.');
+      errorMessages.push('La categoría es requerida.');
     }
     // Validar la fecha correctamente
     if(this.expirationDate.trim() === '') {
-      this.errorMessages.push('La fecha de vencimiento es requerida.');
+      errorMessages.push('La fecha de vencimiento es requerida.');
     } else {
       const today = new Date();
       const expirationDate = new Date(this.expirationDate);
       if(isNaN(expirationDate.getTime())) {
-        this.errorMessages.push('La fecha de vencimiento no es válida.');
+        errorMessages.push('La fecha de vencimiento no es válida.');
       } else if(expirationDate < today) {
-        this.errorMessages.push('La fecha de vencimiento debe ser futura.');
+        errorMessages.push('La fecha de vencimiento debe ser futura.');
       }
     }
     if(this.rawContent.trim() === '') {
-      this.errorMessages.push('El contenido del aviso es requerido.');
+      errorMessages.push('El contenido del aviso es requerido.');
     }
     if(this.clientNumber.trim() === '') {
-      this.errorMessages.push('El número de cliente es requerido.');
+      errorMessages.push('El número de cliente es requerido.');
     } else if(this.clientNumber.trim().length != 9) {
-      this.errorMessages.push('El número de cliente debe tener 9 dígitos.');
+      errorMessages.push('El número de cliente debe tener 9 dígitos.');
     }
 
     if(this.paymentType == 'Boleta' || this.paymentType == 'Factura') {
       if(this.documentNumber.trim() === '') {
-        this.errorMessages.push('El número de documento es requerido para el tipo de pago seleccionado.');
+        errorMessages.push('El número de documento es requerido para el tipo de pago seleccionado.');
       } else if(this.documentNumber.trim().length != 8 && this.paymentType == 'Boleta') {
-        this.errorMessages.push('El número de DNI debe tener 8 dígitos.');
+        errorMessages.push('El número de DNI debe tener 8 dígitos.');
       } else if(this.documentNumber.trim().length != 10 && this.paymentType == 'Factura') {
-        this.errorMessages.push('El número de RUC debe tener 8 dígitos.');
+        errorMessages.push('El número de RUC debe tener 8 dígitos.');
       }
     }
 
-    return this.errorMessages.length === 0;
+    return errorMessages;
 
   }
 }

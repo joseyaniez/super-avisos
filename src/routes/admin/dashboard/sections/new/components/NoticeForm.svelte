@@ -1,6 +1,6 @@
 <script lang="ts">
-
-  import { noticeFormState } from "$lib/states/noticeFormState.svelte";
+  import { noticeFormState } from "$lib/features/notices/states/noticeFormState.svelte";
+  import { noticeUIState } from "$lib/features/notices/states/noticeUIState.svelte";
 
   const noticeTypes = [
     { id: 1, name: 'Pequeño' },
@@ -45,16 +45,13 @@
 
   function handleSubmit(event: Event) {
     event.preventDefault();
-    noticeFormState.errorMessages = [];
     //noticeFormState.errorMessages.splice(0, noticeFormState.errorMessages.length); // Limpiar errores anteriores
-    const isValidForm = noticeFormState.formValidate();
+    noticeUIState.errorMessages = noticeFormState.formValidate();
     //const isValidForm = noticeValidate($state.snapshot(noticeFormState), $state.snapshot(noticeContent));
-    if(isValidForm){
+    if(noticeUIState.errorMessages.length === 0){
       //alert('Formulario válido. Enviando datos...');
       noticeFormState.reset();
       // Aquí puedes agregar la lógica para enviar los datos al servidor o realizar otras acciones necesarias.
-    } else {
-      //
     }
   }
 

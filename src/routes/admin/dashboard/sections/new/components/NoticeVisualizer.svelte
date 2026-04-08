@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { noticeFormState } from "$lib/states/noticeFormState.svelte";
+  import { noticeFormState } from "$lib/features/notices/states/noticeFormState.svelte";
+  import { noticeUIState } from "$lib/features/notices/states/noticeUIState.svelte";
   import { parseEditorText, type ParsedText } from "$lib/util/parser/parseContents";
   import { fade } from "svelte/transition";
 
@@ -91,9 +92,9 @@
         </div>
       </div>
     {/if}
-    {#if noticeFormState.errorMessages.length > 0}
+    {#if noticeUIState.errorMessages.length > 0}
       <div class="flex flex-col gap-2 mt-4">
-        {#each noticeFormState.errorMessages as errorMessage}
+        {#each noticeUIState.errorMessages as errorMessage}
           <div class="flex flex-row gap-4 min-w-2/3 rounded-md bg-red-400 text-white font-bold py-2 px-4 w-1/3" transition:fade|global>
             <p>!!</p>
             <p>{errorMessage}</p>
