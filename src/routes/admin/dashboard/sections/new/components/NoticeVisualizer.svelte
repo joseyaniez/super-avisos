@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { errorMessages, noticeContent, noticeFormState } from "$lib/states/noticeFormState.svelte";
+  import { noticeFormState } from "$lib/states/noticeFormState.svelte";
   import { parseEditorText, type ParsedText } from "$lib/util/parser/parseContents";
   import { fade } from "svelte/transition";
+
   import BigNoticeView from "./notice-types/BigNoticeView.svelte";
   import DobbleImageNoticeView from "./notice-types/DobbleImageNoticeView.svelte";
   import DobbleNoticeView from "./notice-types/DobbleNoticeView.svelte";
   import MedianNoticeView from "./notice-types/MedianNoticeView.svelte";
   import SimpleNoticeView from "./notice-types/SimpleNoticeView.svelte";
 
-  let noticeContents = $derived(parseEditorText(noticeContent.raw))
+  let noticeContents = $derived(parseEditorText(noticeFormState.rawContent));
 
   let designTypes = [
     { id: 1, name: 'D' },
@@ -40,8 +41,8 @@
     <div class="flex flex-row justify-center gap-2">
       {#each designTypes as design}
         <button 
-          onclick={() => noticeContent.designType = design.name}
-          class="px-2 py-1 rounded-md w-10 {noticeContent.designType == design.name ? 'bg-sky-400' : 'bg-slate-300'} text-sm"
+          onclick={() => noticeFormState.designType = design.name}
+          class="px-2 py-1 rounded-md w-10 {noticeFormState.designType == design.name ? 'bg-sky-400' : 'bg-slate-300'} text-sm"
         >
           {design.name}
         </button>
@@ -49,7 +50,7 @@
     </div>
   {/if}
   <div class="flex-1 flex items-center justify-center" style="white-space: pre-line;">
-    {#if noticeContent.raw == ''}
+    {#if noticeFormState.rawContent == ''}
       Sin vista previa
     {:else if noticeFormState.noticeType === 'Pequeño'}
       <SimpleNoticeView content={noticeContents.textoNormal}/>
@@ -70,14 +71,14 @@
         title={noticeContents.titulo} 
         content={noticeContents.textoNormal} 
         postdata={noticeContents.postdata}
-        imageURL={noticeContent.imageUrl}
+        imageURL={noticeFormState.imageUrl}
       />
     {:else if noticeFormState.noticeType === 'Grande'}
       <BigNoticeView 
         title={noticeContents.titulo} 
         content={noticeContents.textoNormal} 
         postdata={noticeContents.postdata}
-        imageURL={noticeContent.imageUrl}
+        imageURL={noticeFormState.imageUrl}
       />
     {/if}
   </div>
@@ -90,9 +91,9 @@
         </div>
       </div>
     {/if}
-    {#if errorMessages.length > 0}
+    {#if noticeFormState.errorMessages.length > 0}
       <div class="flex flex-col gap-2 mt-4">
-        {#each errorMessages as errorMessage}
+        {#each noticeFormState.errorMessages as errorMessage}
           <div class="flex flex-row gap-4 min-w-2/3 rounded-md bg-red-400 text-white font-bold py-2 px-4 w-1/3" transition:fade|global>
             <p>!!</p>
             <p>{errorMessage}</p>

@@ -1,6 +1,6 @@
 <script lang="ts">
 
-  import { noticeFormState, noticeContent, noticeValidate, errorMessages, resetstates } from "$lib/states/noticeFormState.svelte";
+  import { noticeFormState } from "$lib/states/noticeFormState.svelte";
 
   const noticeTypes = [
     { id: 1, name: 'Pequeño' },
@@ -26,7 +26,7 @@
   ]
 
   $effect(() => {
-    const match = noticeContent.raw.match(/\b\d{9}\b/);
+    const match = noticeFormState.rawContent.match(/\b\d{9}\b/);
     if(noticeFormState.clientNumber == '' && match){
       noticeFormState.clientNumber = match[0];
     }
@@ -36,20 +36,22 @@
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
       noticeFormState.image = target.files[0];
-      if(noticeContent.imageUrl){
-        URL.revokeObjectURL(noticeContent.imageUrl);
+      if(noticeFormState.imageUrl){
+        URL.revokeObjectURL(noticeFormState.imageUrl);
       }
-      noticeContent.imageUrl = URL.createObjectURL(target.files[0]);
+      noticeFormState.imageUrl = URL.createObjectURL(target.files[0]);
     }
   }
 
   function handleSubmit(event: Event) {
     event.preventDefault();
-    errorMessages.splice(0, errorMessages.length); // Limpiar errores anteriores
-    const isValidForm = noticeValidate($state.snapshot(noticeFormState), $state.snapshot(noticeContent));
+    noticeFormState.errorMessages = [];
+    //noticeFormState.errorMessages.splice(0, noticeFormState.errorMessages.length); // Limpiar errores anteriores
+    const isValidForm = noticeFormState.formValidate();
+    //const isValidForm = noticeValidate($state.snapshot(noticeFormState), $state.snapshot(noticeContent));
     if(isValidForm){
       //alert('Formulario válido. Enviando datos...');
-      resetstates();
+      noticeFormState.reset();
       // Aquí puedes agregar la lógica para enviar los datos al servidor o realizar otras acciones necesarias.
     } else {
       //
@@ -94,7 +96,7 @@
     <!-- Contenido del aviso -->
     <div class="flex flex-col gap-2 my-4">
       <label for="noticecontent">Contenido</label>
-      <textarea bind:value={noticeContent.raw} class="min-h-50 max-h-100 border rounded-md p-4" id="noticecontent"></textarea>
+      <textarea bind:value={noticeFormState.rawContent} class="min-h-50 max-h-100 border rounded-md p-4" id="noticecontent"></textarea>
     </div>
 
     <!-- Imagen del aviso -->
