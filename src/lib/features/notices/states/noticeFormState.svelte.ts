@@ -1,6 +1,7 @@
+
 class NoticeFormState {
   noticeType = $state("Mediano");
-  category = $state("");
+  category = $state(0);
   observation = $state("");
   documentNumber = $state("");
   image = $state<File | null>(null);
@@ -15,7 +16,7 @@ class NoticeFormState {
 
   reset(){
     this.noticeType = "Mediano";
-    this.category = "";
+    this.category = 0;
     this.observation = "";
     this.documentNumber = "";
     this.image = null;
@@ -30,7 +31,7 @@ class NoticeFormState {
 
   formValidate(): string[] {
     let errorMessages: string[] = [];
-    if(this.category.trim() === '') {
+    if(this.category === 0) {
       errorMessages.push('La categoría es requerida.');
     }
     // Validar la fecha correctamente

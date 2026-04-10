@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { categoryState } from "$lib/features/categories/stores/categoryState.svelte";
   import { noticeFormState } from "$lib/features/notices/states/noticeFormState.svelte";
   import { noticeUIState } from "$lib/features/notices/states/noticeUIState.svelte";
+
+  import { onMount } from "svelte";
 
   const noticeTypes = [
     { id: 1, name: 'Pequeño' },
@@ -11,19 +14,15 @@
     { id: 6, name: 'Solo imagen' },
   ]
 
-  const categories = [
-    { id: 1, name: 'General' },
-    { id: 2, name: 'Eventos' },
-    { id: 3, name: 'Ofertas' },
-    { id: 4, name: 'Noticias' },
-    { id: 5, name: 'Otros' },
-  ]
-
   const documentTypes = [
     { id: 1, name: '-' },
     { id: 2, name: 'Factura' },
     { id: 3, name: 'Boleta' },
   ]
+
+  onMount(async () => {
+    await categoryState.loadCategories();
+  })
 
   $effect(() => {
     const match = noticeFormState.rawContent.match(/\b\d{9}\b/);
@@ -76,10 +75,10 @@
     <!-- Categoría -->
     <div class="flex flex-row gap-3 my-4">
       <label class="flex-2" for="noticetype">Categoría</label>
-      <select bind:value={noticeFormState.category}  id="noticetype" class="flex-2 p-1 rounded text-sm border">
+      <select disabled={categoryState.loading} bind:value={noticeFormState.category}  id="noticetype" class="flex-2 p-1 rounded text-sm border disabled:bg-gray-300 disabled:cursor-progress">
           <option value="" disabled selected> - </option>
-        {#each categories as category}
-          <option value={category.name}>{category.name}</option>
+        {#each categoryState.categories as category}
+          <option value={category.id}>{category.content}</option>
         {/each}
       </select>
     </div>

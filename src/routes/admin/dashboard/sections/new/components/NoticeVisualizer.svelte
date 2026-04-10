@@ -1,6 +1,7 @@
 <script lang="ts">
   import { noticeFormState } from "$lib/features/notices/states/noticeFormState.svelte";
   import { noticeUIState } from "$lib/features/notices/states/noticeUIState.svelte";
+  import { categoryState } from "$lib/features/categories/stores/categoryState.svelte";
   import { parseEditorText, type ParsedText } from "$lib/util/parser/parseContents";
   import { fade } from "svelte/transition";
 
