@@ -1,5 +1,7 @@
 <script lang="ts">
   import { categoryState } from "$lib/features/categories/stores/categoryState.svelte";
+  import { saveCategory } from "$lib/features/categories/services/category.service";
+
   import { noticeFormState } from "$lib/features/notices/states/noticeFormState.svelte";
   import { noticeUIState } from "$lib/features/notices/states/noticeUIState.svelte";
 
@@ -42,15 +44,29 @@
     }
   }
 
-  function handleSubmit(event: Event) {
+  async function handleSubmit(event: Event) {
     event.preventDefault();
     //noticeFormState.errorMessages.splice(0, noticeFormState.errorMessages.length); // Limpiar errores anteriores
     noticeUIState.errorMessages = noticeFormState.formValidate();
     //const isValidForm = noticeValidate($state.snapshot(noticeFormState), $state.snapshot(noticeContent));
-    if(noticeUIState.errorMessages.length === 0){
-      //alert('Formulario válido. Enviando datos...');
-      noticeFormState.reset();
-      // Aquí puedes agregar la lógica para enviar los datos al servidor o realizar otras acciones necesarias.
+    try{
+      if(noticeUIState.errorMessages.length === 0){
+          await saveCategory({
+            content: noticeFormState.rawContent,
+            categoryId: noticeFormState.category,
+            designType: noticeFormState.noticeType,
+            publication: {
+              expirationDate: noticeFormState.expirationDate,
+              voucherType: noticeFormState.paymentType,
+              phone: noticeFormState.clientNumber ?? undefined,
+              documentNumber: noticeFormState.documentNumber ?? undefined,
+            },
+            image: null,
+          })
+          alert('Aviso guardado exitosamente');
+      }
+    } catch(error){
+      noticeUIState.errorMessages.push('Error al guardar el aviso. Intente nuevamente.');
     }
   }
 
