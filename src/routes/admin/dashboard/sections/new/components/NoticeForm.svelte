@@ -63,6 +63,7 @@
             },
             image: null,
           })
+          noticeFormState.reset();
           alert('Aviso guardado exitosamente');
       }
     } catch(error){

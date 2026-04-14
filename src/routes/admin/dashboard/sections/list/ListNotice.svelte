@@ -2,12 +2,15 @@
   import type { NoticeResponse } from "$lib/features/notices/domain/notice.types";
 
   import { onMount } from "svelte";
-  import { loadNotices } from "$lib/features/notices/services/notice.service";
-    import Dialog from "$lib/components/Dialog.svelte";
+  import { loadNotices, deleteNotice } from "$lib/features/notices/services/notice.service";
+  import Dialog from "$lib/components/Dialog.svelte";
 
   let notices = $state<NoticeResponse[]>([])
   let errorMessage = $state('');
+
   let showModal = $state(false);
+  let noticeIdToDelete = $state<number | null>(null);
+
 
   onMount(async () => {
     try {
@@ -16,6 +19,17 @@
       errorMessage = 'Error al cargar los avisos';
     }
   })
+
+  async function handleDeleteNotice() {
+    try {
+      if(noticeIdToDelete === null) return;
+      await deleteNotice(noticeIdToDelete);
+      notices = notices.filter(notice => notice.id !== noticeIdToDelete);
+    } catch(err){
+
+    }
+    showModal = false;
+  }
 
 
 </script>
@@ -62,7 +76,15 @@
             </div>
             <div class="w-80 flex flex-row gap-2">
               <button class="bg-blue-300 px-4 py-2 rounded">Editar</button>
-              <button onclick={() => showModal = true} class="bg-red-300 px-4 py-2 rounded">Eliminar</button>
+              <button 
+                onclick={() => {
+                  showModal = true;
+                  noticeIdToDelete = notice.id;
+                }}
+                class="bg-red-300 px-4 py-2 rounded"
+              >
+                Eliminar
+              </button>
             </div>
           </div>
         {/each}
@@ -74,7 +96,8 @@
 <Dialog bind:showModal>
   <p class="text-xl my-4 text-center">¿Estás seguro de eliminar esta notice?</p>
   <div class="flex flex-row gap-4 justify-center">
-    <button class="bg-blue-300 px-4 py-2 rounded" onclick={() => showModal = false}>Confirmar</button>
+    <button class="bg-blue-300 px-4 py-2 rounded" onclick={handleDeleteNotice}>Confirmar</button>
     <button class="bg-red-300 px-4 py-2 rounded" onclick={() => showModal = false}>Cancelar</button>
   </div>
 </Dialog>
+

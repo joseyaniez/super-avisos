@@ -14,3 +14,18 @@ export const loadNotices = async () => {
     throw new Error('Error al obtener los avisos');
   }
 }
+
+export const deleteNotice = async (id: number) => {
+  try {
+    const response = await fetch(`http://localhost:3000/notices/${id}`, {
+      method: 'DELETE',
+    })
+    if(!response.ok){
+      const errorResponse = await response.json()
+      const errorMessage = errorResponse.message || 'Error al eliminar el aviso';
+      throw new Error(errorMessage);
+    }
+  } catch (error) {
+    throw new Error('Error al eliminar el aviso');
+  }
+}
